@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3F1E8BD8-E316-4315-B05C-05717B7CB33A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalServices", "ExternalServices", "{E2E48AE7-686C-4F69-AF76-595424BEF00E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoneBreakeven.ExampleService", "src\ExternalServices\StoneBreakeven.ExampleService\StoneBreakeven.ExampleService.csproj", "{7C205891-4913-41C5-B33F-8CDB98340F1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoneBreakeven.Api", "src\StoneBreakeven.Api\StoneBreakeven.Api.csproj", "{129FB251-B6A4-4775-84C6-0AC69A7D0332}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C205891-4913-41C5-B33F-8CDB98340F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C205891-4913-41C5-B33F-8CDB98340F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C205891-4913-41C5-B33F-8CDB98340F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C205891-4913-41C5-B33F-8CDB98340F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{129FB251-B6A4-4775-84C6-0AC69A7D0332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{129FB251-B6A4-4775-84C6-0AC69A7D0332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{129FB251-B6A4-4775-84C6-0AC69A7D0332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{129FB251-B6A4-4775-84C6-0AC69A7D0332}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E2E48AE7-686C-4F69-AF76-595424BEF00E} = {3F1E8BD8-E316-4315-B05C-05717B7CB33A}
+		{7C205891-4913-41C5-B33F-8CDB98340F1C} = {E2E48AE7-686C-4F69-AF76-595424BEF00E}
+		{129FB251-B6A4-4775-84C6-0AC69A7D0332} = {3F1E8BD8-E316-4315-B05C-05717B7CB33A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {96577868-8680-4C8F-820B-CAA462B1DE8C}
+	EndGlobalSection
+EndGlobal
