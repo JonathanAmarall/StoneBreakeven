@@ -3,6 +3,7 @@ using Polly.Extensions.Http;
 using Polly.Registry;
 using Polly.Retry;
 using Polly.Timeout;
+using StoneBreakeven.ExampleService;
 using System.Net;
 using System.Net.Sockets;
 
@@ -10,23 +11,24 @@ namespace StoneBreakeven.Api.Extensions
 {
     public static class ResiliencePolicies
     {
-        public static PolicyRegistry CreatePolicies(string registryKeyName)
+        public static PolicyRegistry CreatePolicies(ExampleServiceSettings settings)
         {
             var registry = new PolicyRegistry();
 
-            var timeoutPolicy = CreateTimeoutPolicy();
-            var retryPolicy = CreateRetryPolicy();
+            var timeoutPolicy = CreateTimeoutPolicy(settings);
+            var retryPolicy = CreateRetryPolicy(settings);
+            var circuitBreaker = CreateCircuitBreakPolicy(settings);
             var fallbackPolicy = CreateFallbackPolicy();
 
-            registry.Add(registryKeyName, Policy.WrapAsync(timeoutPolicy, retryPolicy, fallbackPolicy));
+            registry.Add(ExampleServiceSettings.SectionName, Policy.WrapAsync(fallbackPolicy, circuitBreaker, retryPolicy, timeoutPolicy));
 
             return registry;
         }
 
-        private static AsyncTimeoutPolicy<HttpResponseMessage> CreateTimeoutPolicy()
+        private static AsyncTimeoutPolicy<HttpResponseMessage> CreateTimeoutPolicy(ExampleServiceSettings settings)
         {
             return Policy.TimeoutAsync<HttpResponseMessage>(
-                   timeout: TimeSpan.FromMilliseconds(10000),
+                   timeout: TimeSpan.FromMilliseconds(settings.TimeoutInMilliseconds),
                    timeoutStrategy: TimeoutStrategy.Optimistic,
                    onTimeoutAsync: (context, timespan, _, exc) =>
                    {
@@ -35,20 +37,23 @@ namespace StoneBreakeven.Api.Extensions
                    });
         }
 
-        private static AsyncRetryPolicy<HttpResponseMessage> CreateRetryPolicy()
+        private static AsyncRetryPolicy<HttpResponseMessage> CreateRetryPolicy(ExampleServiceSettings settings)
         {
             return Policy<HttpResponseMessage>
                    .Handle<HttpRequestException>()
                    .Or<SocketException>()
                    .Or<TimeoutException>()
                    .Or<TaskCanceledException>()
-                   .Or<TimeoutRejectedException>()
+                   //.Or<TimeoutRejectedException>()
                    .Or<HttpRequestException>(x => x.StatusCode == HttpStatusCode.FailedDependency)
                    .OrTransientHttpError()
-                   .WaitAndRetryAsync(retryCount: 5,
-                    retryAttempt => TimeSpan.FromMilliseconds(300 * Math.Pow(2, retryAttempt)),
-                    onRetry: (httpResponse, timeSpan, count, context) =>
-                        LogRequest(timeSpan, LogType.Retry)
+                   .WaitAndRetryAsync(
+                        retryCount: settings.RetryCount,
+                        sleepDurationProvider: retryAttempt => TimeSpan.FromMilliseconds(settings.RetryInterval * Math.Pow(2, retryAttempt)),
+                        onRetry: (httpResponse, timeSpan, count, context) =>
+                        {
+                            LogRequest(timeSpan, LogType.Retry);
+                        }
                     );
         }
 
@@ -58,10 +63,8 @@ namespace StoneBreakeven.Api.Extensions
             defaultFallBack.RequestMessage = new HttpRequestMessage();
 
             return Policy<HttpResponseMessage>
-                .HandleInner<HttpRequestException>()
-                .Or<SocketException>()
-                .Or<TimeoutException>()
-                .Or<TimeoutRejectedException>()
+                .Handle<HttpRequestException>()
+                .OrResult(result => result.StatusCode == HttpStatusCode.ServiceUnavailable)
                 .FallbackAsync(fallbackValue: defaultFallBack, onFallbackAsync: (http, context) =>
                 {
                     LogRequest(default, LogType.Fallback);
@@ -69,7 +72,24 @@ namespace StoneBreakeven.Api.Extensions
                 });
         }
 
-        private static void LogRequest(TimeSpan timespan, LogType type)
+        private static IAsyncPolicy<HttpResponseMessage> CreateCircuitBreakPolicy(ExampleServiceSettings settings)
+        {
+            return HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .AdvancedCircuitBreakerAsync(
+                        failureThreshold: settings.CircuitBreakerSettings.FailureThreshold,
+                        samplingDuration: TimeSpan.FromSeconds(settings.CircuitBreakerSettings.SamplingDurationInSeconds),
+                        minimumThroughput: settings.CircuitBreakerSettings.MinimumThroughput,
+                        durationOfBreak: TimeSpan.FromSeconds(settings.CircuitBreakerSettings.DurationOfBreakInSeconds),
+                        onBreak: (ex, _) =>
+                        {
+                            LogRequest(default, LogType.CircuitBreaker, "onBreak");
+                        },
+                        onReset: () => LogRequest(default, LogType.CircuitBreaker, "onReset"),
+                        onHalfOpen: () => LogRequest(default, LogType.CircuitBreaker, "onHalfOpen"));
+        }
+
+        private static void LogRequest(TimeSpan timespan, LogType type, string? description = default)
         {
             var previousBackgroundColor = Console.BackgroundColor;
             var previousForegroundColor = Console.ForegroundColor;
@@ -78,7 +98,7 @@ namespace StoneBreakeven.Api.Extensions
             Console.ForegroundColor = ConsoleColor.Black;
 
             Console.Out.WriteLineAsync($" ***** {DateTime.Now:HH:mm:ss} | " +
-                $"{type}\n" +
+                $"{type}\n" + description ?? string.Empty +
                 $"Tempo de Espera em segundos: {timespan.TotalSeconds} **** ");
 
             Console.BackgroundColor = previousBackgroundColor;

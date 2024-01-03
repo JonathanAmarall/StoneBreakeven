@@ -18,24 +18,27 @@ public class ExampleController : ControllerBase
     public async Task<ActionResult> GetRetry(CancellationToken cancellationToken)
     {
         var response = await _exampleService.GetWithInternalServerError(cancellationToken);
-        return Ok(response);
+        return Ok(new { Message = response });
     }
 
     [HttpGet("timeout")]
-    public ActionResult GetTimeout(CancellationToken cancellationToken)
+    public async Task<ActionResult> GetTimeout(CancellationToken cancellationToken)
     {
-        return Ok();
+        var response = await _exampleService.GetWithDelay(10000, cancellationToken);
+        return Ok(new { Message = response });
     }
 
     [HttpGet("fallback")]
-    public ActionResult GetFallback(CancellationToken cancellationToken)
+    public async Task<ActionResult> GetFallback(CancellationToken cancellationToken)
     {
-        return Ok();
+        var response = await _exampleService.GetWithUnavailable(cancellationToken);
+        return Ok(new { Message = response });
     }
 
     [HttpGet("circuit-breaker")]
-    public ActionResult GetCircuitBreaker(CancellationToken cancellationToken)
+    public async Task<ActionResult> GetCircuitBreaker(CancellationToken cancellationToken)
     {
-        return Ok();
+        var response = await _exampleService.GetWithInternalServerError(cancellationToken);
+        return Ok(new { Message = response });
     }
 }

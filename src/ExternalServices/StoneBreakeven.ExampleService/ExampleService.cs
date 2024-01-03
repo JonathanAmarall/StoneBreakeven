@@ -18,5 +18,10 @@
         {
             return await _client.GetStringAsync($"/500", cancellationToken);
         }
+
+        public async Task<string> GetWithUnavailable(CancellationToken cancellationToken)
+        {
+            return await _client.GetStringAsync($"/503?sleep=300", cancellationToken);
+        }
     }
 }
