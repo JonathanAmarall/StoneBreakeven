@@ -17,7 +17,7 @@ A resiliência é uma característica crucial em sistemas distribuídos, permitindo 
 
 3. **Fallback Strategy:** Implementação de estratégias de fallback para fornecer alternativas ou valores padrão quando uma chamada falha.
 
-4. **Timeout:** 
+4. **Timeout:** É um conjunto de regras de definem o que devem acontecer após um determinado estado quando ultrapassa o tempo determinado.
 
 ## Pré-requisitos
 
@@ -47,3 +47,11 @@ docker-compose up -d
 2. Abra a solução no link: 
 
 3. Teste a solução com o auxilio do Swagger OpenAPI
+
+
+
+## Contribuindo
+
+Se você encontrar problemas ou desejar contribuir, sinta-se à vontade para abrir uma issue ou enviar um pull request. Todas as contribuições são bem-vindas!
+
+

@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  stonebreakeven.api:
+    image: ${DOCKER_REGISTRY-}stonebreakevenapi
+    build:
+      context: .
+      dockerfile: ../src/StoneBreakeven.Api/Dockerfile
+    ports:
+      - "5099:80"
