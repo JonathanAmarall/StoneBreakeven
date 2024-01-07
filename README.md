@@ -1,25 +1,25 @@
-# Projeto Breakeven StoneCo: Resili�ncia em Aplica��es ASP.NET
+# Projeto Breakeven StoneCo: Resiliência em Aplicações ASP.NET
 
-## Descri��o do Projeto
+## Descrição do Projeto
 
-Este projeto tem como objetivo demonstrar a implementa��o de resili�ncia em aplica��es ASP.NET utilizando a biblioteca Polly em linguagem C#. 
-A resili�ncia � uma caracter�stica crucial em sistemas distribu�dos, permitindo que as aplica��es se recuperem de falhas tempor�rias e forne�am uma experi�ncia cont�nua aos usu�rios, mesmo em condi��es adversas.
+Este projeto tem como objetivo demonstrar a implementação de resiliência em aplicações ASP.NET utilizando a biblioteca Polly em linguagem C#. 
+A resiliência é uma característica crucial em sistemas distribuídos, permitindo que as aplicações se recuperem de falhas temporárias e forneçam uma experiência contínua aos usuários, mesmo em condições adversas.
 
-## Polly - Uma Vis�o Geral
+## Polly - Uma Visão Geral
 
-[Polly](https://github.com/App-vNext/Polly) � uma biblioteca de pol�tica de resili�ncia que ajuda os desenvolvedores a lidar com falhas em suas aplica��es, fornecendo mecanismos simples e poderosos para implementar estrat�gias como retry, circuit breaker, fallback e mais. Este projeto utiliza Polly para aprimorar a resili�ncia das aplica��es ASP.NET.
+[Polly](https://github.com/App-vNext/Polly) É uma biblioteca de política de resiliência que ajuda os desenvolvedores a lidar com falhas em suas aplicações, fornecendo mecanismos simples e poderosos para implementar estratégias como retry, circuit breaker, fallback e mais. Este projeto utiliza Polly para aprimorar a resiliência das aplicações ASP.NET.
 
 ## Recursos Principais
 
-1. **Retry Policy:** Implementa��o de pol�ticas de repeti��o para lidar com falhas tempor�rias e transientes em chamadas de servi�os externos.
+1. **Retry Policy:** Implementação de políticas de repetição para lidar com falhas temporárias e transientes em chamadas de serviços externos.
 
-2. **Circuit Breaker:** Utiliza��o do circuit breaker para evitar chamadas repetidas a servi�os que est�o falhando, melhorando a efici�ncia e evitando poss�veis sobrecargas.
+2. **Circuit Breaker:** Utilização do circuit breaker para evitar chamadas repetidas a serviços que estão falhando, melhorando a eficiência e evitando possíveis sobrecargas.
 
-3. **Fallback Strategy:** Implementa��o de estrat�gias de fallback para fornecer alternativas ou valores padr�o quando uma chamada falha.
+3. **Fallback Strategy:** Implementação de estratégias de fallback para fornecer alternativas ou valores padrão quando uma chamada falha.
 
-4. **Timeout:** � um conjunto de regras de definem o que devem acontecer ap�s um determinado estado quando ultrapassa o tempo determinado.
+4. **Timeout:** É uma que define o que devem acontecer após um determinado estado quando ultrapassa o tempo determinado.
 
-## Pr�-requisitos
+## Pré-requisitos
 
 - Visual Studio 2019 ou superior
 - .NET 7
@@ -27,7 +27,7 @@ A resili�ncia � uma caracter�stica crucial em sistemas distribu�dos, per
 
 ## Como Executar (dotnet)
 
-1. Clone este reposit�rio:
+1. Clone este repositório:
 
 ```bash
 git clone https://github.com/JonathanAmarall/StoneBreakeven
