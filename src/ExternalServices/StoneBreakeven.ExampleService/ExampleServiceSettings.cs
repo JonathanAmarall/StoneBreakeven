@@ -13,10 +13,10 @@
 
     public class CircuitBreakerSettings
     {
-        public bool EnableCircuitBreakerPolicy { get; set; }
         public int DurationOfBreakInSeconds { get; set; }
         public double FailureThreshold { get; set; }
         public int SamplingDurationInSeconds { get; set; }
         public int MinimumThroughput { get; set; }
+        public int HandledEventsAllowedBeforeBreaking { get; set; }
     }
 }

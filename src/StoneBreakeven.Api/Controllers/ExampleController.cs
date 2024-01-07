@@ -17,7 +17,7 @@ public class ExampleController : ControllerBase
     [HttpGet("retry")]
     public async Task<ActionResult> GetRetry(CancellationToken cancellationToken)
     {
-        var response = await _exampleService.GetWithInternalServerError(cancellationToken);
+        var response = await _exampleService.GetRandomResult(cancellationToken);
         return Ok(new { Message = response });
     }
 

@@ -9,6 +9,11 @@
             _client = client;
         }
 
+        public async Task<string> GetRandomResult(CancellationToken cancellationToken)
+        {
+            return await _client.GetStringAsync($"/Random/500,200,500", cancellationToken);
+        }
+
         public async Task<string> GetWithDelay(int sleep, CancellationToken cancellationToken)
         {
             return await _client.GetStringAsync($"/200?sleep={sleep}", cancellationToken);
@@ -21,7 +26,7 @@
 
         public async Task<string> GetWithUnavailable(CancellationToken cancellationToken)
         {
-            return await _client.GetStringAsync($"/503?sleep=300", cancellationToken);
+            return await _client.GetStringAsync($"/503", cancellationToken);
         }
     }
 }

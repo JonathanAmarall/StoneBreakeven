@@ -1,4 +1,5 @@
-﻿using StoneBreakeven.Api.Models;
+﻿using Polly.CircuitBreaker;
+using StoneBreakeven.Api.Models;
 using System.Net;
 using System.Text.Json;
 
@@ -54,6 +55,7 @@ namespace StoneBreakeven.Api.Middlewares
                exception switch
                {
                    HttpRequestException httpRequestException => (httpRequestException.StatusCode!.Value, new[] { httpRequestException.Message }),
+                   BrokenCircuitException brokenCircuitException => (HttpStatusCode.TooManyRequests, new[] { brokenCircuitException.Message }),
                    _ => (HttpStatusCode.InternalServerError, new[] { "Internal Server Error" })
                };
     }

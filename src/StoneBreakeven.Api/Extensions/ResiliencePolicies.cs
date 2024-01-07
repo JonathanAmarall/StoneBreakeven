@@ -1,4 +1,5 @@
 ﻿using Polly;
+using Polly.CircuitBreaker;
 using Polly.Extensions.Http;
 using Polly.Registry;
 using Polly.Retry;
@@ -32,7 +33,7 @@ namespace StoneBreakeven.Api.Extensions
                    timeoutStrategy: TimeoutStrategy.Optimistic,
                    onTimeoutAsync: (context, timespan, _, exc) =>
                    {
-                       LogRequest(timespan, LogType.Timeout);
+                       TimeoutLogRequest(timespan);
                        return Task.CompletedTask;
                    });
         }
@@ -41,18 +42,16 @@ namespace StoneBreakeven.Api.Extensions
         {
             return Policy<HttpResponseMessage>
                    .Handle<HttpRequestException>()
+                   .OrResult(result => result.StatusCode == HttpStatusCode.InternalServerError)
                    .Or<SocketException>()
                    .Or<TimeoutException>()
                    .Or<TaskCanceledException>()
-                   //.Or<TimeoutRejectedException>()
-                   .Or<HttpRequestException>(x => x.StatusCode == HttpStatusCode.FailedDependency)
-                   .OrTransientHttpError()
                    .WaitAndRetryAsync(
                         retryCount: settings.RetryCount,
                         sleepDurationProvider: retryAttempt => TimeSpan.FromMilliseconds(settings.RetryInterval * Math.Pow(2, retryAttempt)),
-                        onRetry: (httpResponse, timeSpan, count, context) =>
+                        onRetry: (httpResponse, timeSpan, attempt, context) =>
                         {
-                            LogRequest(timeSpan, LogType.Retry);
+                            RetryLogRequest(timeSpan, attempt);
                         }
                     );
         }
@@ -67,7 +66,7 @@ namespace StoneBreakeven.Api.Extensions
                 .OrResult(result => result.StatusCode == HttpStatusCode.ServiceUnavailable)
                 .FallbackAsync(fallbackValue: defaultFallBack, onFallbackAsync: (http, context) =>
                 {
-                    LogRequest(default, LogType.Fallback);
+                    FallbackLogRequest(http.Result.StatusCode, defaultFallBack.StatusCode);
                     return Task.CompletedTask;
                 });
         }
@@ -81,36 +80,48 @@ namespace StoneBreakeven.Api.Extensions
                         samplingDuration: TimeSpan.FromSeconds(settings.CircuitBreakerSettings.SamplingDurationInSeconds),
                         minimumThroughput: settings.CircuitBreakerSettings.MinimumThroughput,
                         durationOfBreak: TimeSpan.FromSeconds(settings.CircuitBreakerSettings.DurationOfBreakInSeconds),
-                        onBreak: (ex, _) =>
+                        onBreak: (ex, timeSpan) =>
                         {
-                            LogRequest(default, LogType.CircuitBreaker, "onBreak");
+                            CircuitBreakerLogRequest(CircuitState.Open);
                         },
-                        onReset: () => LogRequest(default, LogType.CircuitBreaker, "onReset"),
-                        onHalfOpen: () => LogRequest(default, LogType.CircuitBreaker, "onHalfOpen"));
+                        onReset: () => CircuitBreakerLogRequest(CircuitState.Closed),
+                        onHalfOpen: () => CircuitBreakerLogRequest(CircuitState.HalfOpen));
         }
 
-        private static void LogRequest(TimeSpan timespan, LogType type, string? description = default)
+        private static void LogRequest(string title, string message)
         {
             var previousBackgroundColor = Console.BackgroundColor;
             var previousForegroundColor = Console.ForegroundColor;
 
-            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.BackgroundColor = ConsoleColor.Green;
             Console.ForegroundColor = ConsoleColor.Black;
 
-            Console.Out.WriteLineAsync($" ***** {DateTime.Now:HH:mm:ss} | " +
-                $"{type}\n" + description ?? string.Empty +
-                $"Tempo de Espera em segundos: {timespan.TotalSeconds} **** ");
+            Console.Out.WriteLineAsync($" *****\n" +
+                $"{title} | {DateTime.Now:HH:mm:ss} |\n{message} \n" +
+                $"*****");
 
             Console.BackgroundColor = previousBackgroundColor;
             Console.ForegroundColor = previousForegroundColor;
         }
-    }
 
-    public enum LogType
-    {
-        Timeout,
-        Retry,
-        CircuitBreaker,
-        Fallback
+        private static void RetryLogRequest(TimeSpan timespan, int attempt)
+        {
+            LogRequest("RETRY", $"Tempo de Espera em segundos: {timespan.TotalSeconds} |\nTentativa: {attempt}");
+        }
+
+        private static void TimeoutLogRequest(TimeSpan timespan)
+        {
+            LogRequest("TIMEOUT", $"Tempo Limite de espera em segundos: {timespan.TotalSeconds}");
+        }
+
+        private static void FallbackLogRequest(HttpStatusCode externalServiceStatusCode, HttpStatusCode defaultStatusCode)
+        {
+            LogRequest("FALLBACK", $"Status Code recebido do serviço externo: {externalServiceStatusCode} |\nStatus Code retornado:  {defaultStatusCode}");
+        }
+
+        private static void CircuitBreakerLogRequest(CircuitState circuitState)
+        {
+            LogRequest("CIRCUIT BREAKER", $"Estado atual: {circuitState}");
+        }
     }
 }
