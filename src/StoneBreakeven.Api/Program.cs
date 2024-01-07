@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Polly.Registry;
 using StoneBreakeven.Api.Extensions;
 using StoneBreakeven.Api.Middlewares;
@@ -14,7 +15,7 @@ var registry = ResiliencePolicies.CreatePolicies(exampleServiceSettings!);
 builder.Services.AddSingleton<IReadOnlyPolicyRegistry<string>>(registry);
 
 builder.Services.AddHttpClient<IExampleService, ExampleService>(client =>
-    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ExampleService:Uri")!))
+    client.BaseAddress = new Uri(exampleServiceSettings!.BaseAddress))
         .AddPolicyHandlerFromRegistry(ExampleServiceSettings.SectionName);
 
 var app = builder.Build();
