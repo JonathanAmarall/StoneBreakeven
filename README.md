@@ -1,25 +1,25 @@
-# Projeto Breakeven StoneCo: Resiliência em Aplicações ASP.NET
+# Projeto Breakeven StoneCo: Resiliï¿½ncia em Aplicaï¿½ï¿½es ASP.NET
 
-## Descrição do Projeto
+## Descriï¿½ï¿½o do Projeto
 
-Este projeto tem como objetivo demonstrar a implementação de resiliência em aplicações ASP.NET utilizando a biblioteca Polly em linguagem C#. 
-A resiliência é uma característica crucial em sistemas distribuídos, permitindo que as aplicações se recuperem de falhas temporárias e forneçam uma experiência contínua aos usuários, mesmo em condições adversas.
+Este projeto tem como objetivo demonstrar a implementaï¿½ï¿½o de resiliï¿½ncia em aplicaï¿½ï¿½es ASP.NET utilizando a biblioteca Polly em linguagem C#. 
+A resiliï¿½ncia ï¿½ uma caracterï¿½stica crucial em sistemas distribuï¿½dos, permitindo que as aplicaï¿½ï¿½es se recuperem de falhas temporï¿½rias e forneï¿½am uma experiï¿½ncia contï¿½nua aos usuï¿½rios, mesmo em condiï¿½ï¿½es adversas.
 
-## Polly - Uma Visão Geral
+## Polly - Uma Visï¿½o Geral
 
-[Polly](https://github.com/App-vNext/Polly) é uma biblioteca de política de resiliência que ajuda os desenvolvedores a lidar com falhas em suas aplicações, fornecendo mecanismos simples e poderosos para implementar estratégias como retry, circuit breaker, fallback e mais. Este projeto utiliza Polly para aprimorar a resiliência das aplicações ASP.NET.
+[Polly](https://github.com/App-vNext/Polly) ï¿½ uma biblioteca de polï¿½tica de resiliï¿½ncia que ajuda os desenvolvedores a lidar com falhas em suas aplicaï¿½ï¿½es, fornecendo mecanismos simples e poderosos para implementar estratï¿½gias como retry, circuit breaker, fallback e mais. Este projeto utiliza Polly para aprimorar a resiliï¿½ncia das aplicaï¿½ï¿½es ASP.NET.
 
 ## Recursos Principais
 
-1. **Retry Policy:** Implementação de políticas de repetição para lidar com falhas temporárias e transientes em chamadas de serviços externos.
+1. **Retry Policy:** Implementaï¿½ï¿½o de polï¿½ticas de repetiï¿½ï¿½o para lidar com falhas temporï¿½rias e transientes em chamadas de serviï¿½os externos.
 
-2. **Circuit Breaker:** Utilização do circuit breaker para evitar chamadas repetidas a serviços que estão falhando, melhorando a eficiência e evitando possíveis sobrecargas.
+2. **Circuit Breaker:** Utilizaï¿½ï¿½o do circuit breaker para evitar chamadas repetidas a serviï¿½os que estï¿½o falhando, melhorando a eficiï¿½ncia e evitando possï¿½veis sobrecargas.
 
-3. **Fallback Strategy:** Implementação de estratégias de fallback para fornecer alternativas ou valores padrão quando uma chamada falha.
+3. **Fallback Strategy:** Implementaï¿½ï¿½o de estratï¿½gias de fallback para fornecer alternativas ou valores padrï¿½o quando uma chamada falha.
 
-4. **Timeout:** É um conjunto de regras de definem o que devem acontecer após um determinado estado quando ultrapassa o tempo determinado.
+4. **Timeout:** ï¿½ um conjunto de regras de definem o que devem acontecer apï¿½s um determinado estado quando ultrapassa o tempo determinado.
 
-## Pré-requisitos
+## Prï¿½-requisitos
 
 - Visual Studio 2019 ou superior
 - .NET 7
@@ -27,31 +27,28 @@ A resiliência é uma característica crucial em sistemas distribuídos, permitindo 
 
 ## Como Executar (dotnet)
 
-1. Clone este repositório:
+1. Clone este repositï¿½rio:
 
 ```bash
 git clone https://github.com/JonathanAmarall/StoneBreakeven
 
-2. Abra a solução no Visual Studio.
+2. Abra a soluÃ§Ã£o no Visual Studio.
 
-3. Execute o aplicativo e explore os diferentes cenários de falha que foram tratados usando Polly.
+3. Execute o aplicativo e explore os diferentes cenÃ¡rios de falha que foram tratados usando Polly.
 
 
 ## Como Executar (docker)
 
-1. Na raiz do projeto digite:
+1. Percorra atÃ© o diretÃ³rio 'docker' e execute o seguinte comando:
 
-```bash
 docker-compose up -d
 
-2. Abra a solução no link: 
+2. Abra a soluÃ§Ã£o no link: http://localhost:5034/swagger
 
-3. Teste a solução com o auxilio do Swagger OpenAPI
+3. Teste a soluÃ§Ã£o com o auxilio do Swagger OpenAPI
 
-
+```
 
 ## Contribuindo
 
-Se você encontrar problemas ou desejar contribuir, sinta-se à vontade para abrir uma issue ou enviar um pull request. Todas as contribuições são bem-vindas!
-
-
+Se vocÃª encontrar problemas ou desejar contribuir, sinta-se Ã  vontade para abrir uma issue ou enviar um pull request. Todas as contribuiÃ§Ãµes sÃ£o bem-vindas!
