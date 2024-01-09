@@ -4,7 +4,7 @@ using Polly.Extensions.Http;
 using Polly.Registry;
 using Polly.Retry;
 using Polly.Timeout;
-using StoneBreakeven.ExampleService;
+using StoneBreakeven.ExampleService.Settings;
 using System.Net;
 using System.Net.Sockets;
 

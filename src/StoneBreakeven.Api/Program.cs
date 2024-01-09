@@ -3,6 +3,7 @@ using Polly.Registry;
 using StoneBreakeven.Api.Extensions;
 using StoneBreakeven.Api.Middlewares;
 using StoneBreakeven.ExampleService;
+using StoneBreakeven.ExampleService.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
